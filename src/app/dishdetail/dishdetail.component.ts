@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Params, ActivatedRoute } from '@angular/router/';
+import { Component, OnInit, Inject } from '@angular/core';
 import { Location } from '@angular/common';
-import { switchMap } from 'rxjs/operators';
+import { Params, ActivatedRoute } from '@angular/router/';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { Comment } from '../shared/comment.interface';
 import { Dish } from '../shared/dish.interface';
 import { DishService } from '../services/dish.service';
+
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dishdetail',
@@ -19,6 +20,7 @@ export class DishdetailComponent implements OnInit {
   prev: string = '';
   next: string = '';
   newComment: Comment = {};
+  errMsg: string = '';
 
   formErrors = {
     name: '',
@@ -48,7 +50,8 @@ export class DishdetailComponent implements OnInit {
   constructor(
     private dishService: DishService,
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    @Inject('BaseURL') public BaseURL: string
   ) {
     this.createForm();
   }
@@ -61,13 +64,16 @@ export class DishdetailComponent implements OnInit {
       .pipe(
         switchMap((params: Params) => this.dishService.getDish(params['id']))
       )
-      .subscribe((dish) => {
-        this.dish = dish;
-        this.setPrevNext(dish.id as string);
-      });
+      .subscribe(
+        (dish) => {
+          this.dish = dish;
+          this.setPrevNext(dish.id as string);
+        },
+        (errmess) => (this.errMsg = <any>errmess)
+      );
   }
 
-  onSubmit(){
+  onSubmit() {
     var d = new Date();
     this.newComment = {
       author: this.commentForm.value.name,

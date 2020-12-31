@@ -15,7 +15,11 @@
           <h3>{{ dish.name | uppercase }}</h3>
         </mat-card-title>
       </mat-card-header>
-      <img mat-card-image src="{{ dish.image }}" alt="{{ dish.name }}" />
+      <img
+        mat-card-image
+        src="{{ BaseURL + dish.image }}"
+        alt="{{ dish.name }}"
+      />
       <mat-card-content>
         <p>{{ dish.description }}</p>
       </mat-card-content>
@@ -52,25 +56,53 @@
         <p mat-line>-- {{ commentForm.value.comment }}</p>
       </mat-list-item>
     </mat-list>
-    <div fxFlex class="full-width">      
+    <div fxFlex class="full-width">
       <form novalidate [formGroup]="commentForm" (ngSubmit)="onSubmit()">
         <p>
           <mat-form-field class="full-width">
-            <input type="text" matInput placeholder="Name" required formControlName="name" />
-            <mat-error *ngIf="formErrors.name">{{formErrors.name}}</mat-error>
+            <input
+              type="text"
+              matInput
+              placeholder="Name"
+              required
+              formControlName="name"
+            />
+            <mat-error *ngIf="formErrors.name">{{ formErrors.name }}</mat-error>
           </mat-form-field>
         </p>
         <p>
           Stars
-          <mat-slider min="0" max="5" step="1" thumbLabel tickInterval="1" formControlName="stars"></mat-slider>
+          <mat-slider
+            min="0"
+            max="5"
+            step="1"
+            thumbLabel
+            tickInterval="1"
+            formControlName="stars"
+          ></mat-slider>
         </p>
         <p>
           <mat-form-field class="full-width">
-            <textarea rows="12" placeholder="Your Comment" matInput formControlName="comment" required></textarea>
-            <mat-error *ngIf="formErrors.comment">{{formErrors.comment}}</mat-error>
+            <textarea
+              rows="12"
+              placeholder="Your Comment"
+              matInput
+              formControlName="comment"
+              required
+            ></textarea>
+            <mat-error *ngIf="formErrors.comment">{{
+              formErrors.comment
+            }}</mat-error>
           </mat-form-field>
         </p>
-        <button type="submit" mat-button class="background-primary text-floral-white" [disabled]="!commentForm.valid">Submit</button>
+        <button
+          type="submit"
+          mat-button
+          class="background-primary text-floral-white"
+          [disabled]="!commentForm.valid"
+        >
+          Submit
+        </button>
       </form>
     </div>
   </div>
@@ -83,8 +115,13 @@
   fxLayoutAlign="space-around center"
   fxLayoutGap="10px"
   fxLayoutGap.xs="0"
-  *ngIf="(dish | json) == '{}'"
 >
-  <mat-spinner></mat-spinner>
-  <h4>Loading . . . Please Wait</h4>
+  <div *ngIf="(dish | json) == '{}'">
+    <mat-spinner></mat-spinner>
+    <h4>Loading . . . Please Wait</h4>
+  </div>
+  <div fxFlex *ngIf="errMsg">
+    <h2>Error</h2>
+    <h4>{{ errMsg }}</h4>
+  </div>
 </div>

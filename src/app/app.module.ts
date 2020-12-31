@@ -22,6 +22,8 @@ import {MatSliderModule} from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
 import {ReactiveFormsModule} from '@angular/forms';
 
+import {HttpClientModule} from '@angular/common/http';
+
 import 'hammerjs';
 import { MenuComponent } from './menu/menu.component';
 import { DishdetailComponent } from './dishdetail/dishdetail.component';
@@ -35,6 +37,9 @@ import { DishService } from './services/dish.service';
 import { PromotionService } from './services/promotion.service';
 import { LeaderService } from './services/leader.service';
 import { LoginComponent } from './login/login.component';
+import {ProcessHTTPMsgService} from './services/process-httpmsg.service';
+
+import {baseURL} from './shared/baseurl'
 
 @NgModule({
   declarations: [
@@ -68,9 +73,9 @@ import { LoginComponent } from './login/login.component';
     MatSliderModule,
     FormsModule,
     ReactiveFormsModule,
-
+    HttpClientModule,
   ],
-  providers: [DishService, PromotionService, LeaderService],
+  providers: [DishService, PromotionService, LeaderService, {provide: 'BaseURL', useValue: baseURL},ProcessHTTPMsgService],
   entryComponents: [LoginComponent],
   bootstrap: [AppComponent],
 })
