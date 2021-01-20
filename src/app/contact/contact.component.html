@@ -36,7 +36,7 @@
       </div>
     </div>
   </div>
-  <div fxFlex fxFlexOffset="20px" class="full-width">
+  <div fxFlex fxFlexOffset="20px" class="full-width" *ngIf="!sendingForm">
     <h3>Send us your Feedback</h3>
     <hr />
     <form novalidate (ngSubmit)="onSubmit()" [formGroup]="feedbackForm" #fform="ngForm">
@@ -68,7 +68,7 @@
         <mat-form-field class="half-width">
           <input
             type="tel"
-            pattern="[0-9]"
+            pattern="[0-9]+"
             matInput
             formControlName="telnum"
             placeholder="Telephone"
@@ -109,5 +109,30 @@
       </p>
       <button mat-button type="submit" class="background-primary text-floral-white" [disabled]="feedbackForm.invalid">Submit</button>
     </form>
+  </div>
+  <div
+  fxFlex
+  fxLayout="column"
+  fxLayoutAlign="space-around center"
+  *ngIf="sendingForm"
+>
+<h4>Submiting Form</h4>
+  <mat-spinner></mat-spinner>
+  <h4>Loading . . . Please Wait</h4>    
+</div>
+  <div *ngIf="(feedb | json) != '{}' && !sendingForm">
+    <h3>Your Submission</h3>
+    <p>First Name: {{feedb.firstname}}</p>
+    <p>Last Name: {{feedb.lastname}}</p>
+    <p>Tel. Number: {{feedb.telnum}}</p>
+    <p>Email: {{feedb.email}}</p>
+    <p>Contact You: {{feedb.agree}}</p>
+    <p>How?: {{feedb.contactype}}</p>
+    <p>message: {{feedb.message}}</p>
+    
+  </div>
+  <div fxFlex *ngIf="errMsg">
+    <h2>Error</h2>
+    <h4>{{errMsg}}</h4>
   </div>
 </div>

@@ -2,6 +2,12 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.2.
 
+## BackEnd
+
+in the json-server folder open a terminal an run the command json-server --watch db.json
+to start de server.
+>https://github.com/typicode/json-server#getting-started
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.

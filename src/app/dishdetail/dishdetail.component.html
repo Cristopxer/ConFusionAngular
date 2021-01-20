@@ -7,6 +7,7 @@
   fxLayoutGap="10px"
   fxLayoutGap.xs="0"
   *ngIf="(dish | json) != '{}'"
+  [@visibility]="visibility"
 >
   <div fxFlex="40">
     <mat-card>

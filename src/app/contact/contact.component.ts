@@ -1,12 +1,19 @@
-import { ThrowStmt } from '@angular/compiler';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Feedback, ContactType } from '../shared/feedback';
+
+import { flyInOut } from '../animations/app.animation';
+import { FeedbackService } from '../services/feedback.service';
 
 @Component({
   selector: 'app-contact',
   templateUrl: './contact.component.html',
   styleUrls: ['./contact.component.scss'],
+  host: {
+    '[@flyInOut]': 'true',
+    style: 'display:block',
+  },
+  animations: [flyInOut()],
 })
 export class ContactComponent implements OnInit {
   formErrors = {
@@ -39,9 +46,15 @@ export class ContactComponent implements OnInit {
 
   feedbackForm: FormGroup = new FormGroup({});
   feedback: Feedback = {};
+  feedb: Feedback = {};
   contactType = ContactType;
+  errMsg:string = "";
+  sendingForm:boolean = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private feedbackService: FeedbackService
+  ) {
     this.createForm();
   }
 
@@ -65,7 +78,7 @@ export class ContactComponent implements OnInit {
           Validators.maxLength(25),
         ],
       ],
-      telnum: [0, [Validators.required]],
+      telnum: [0, [Validators.required, Validators.pattern]],
       email: ['', [Validators.required, Validators.email]],
       agree: false,
       contacttype: 'None',
@@ -79,6 +92,7 @@ export class ContactComponent implements OnInit {
     );
   }
   onSubmit() {
+    this.sendingForm = true;
     this.feedback = this.feedbackForm.value;
     console.log(this.feedback);
     this.feedbackForm.reset({
@@ -90,6 +104,15 @@ export class ContactComponent implements OnInit {
       contacttype: 'None',
       message: '',
     });
+    this.feedbackService
+      .postFeedback(this.feedback)
+      .subscribe((feed) => {this.feedb = feed; this.sendingForm=false;},
+      (errmess) => {
+        this.feedback = {};
+        this.feedback = {};
+        this.errMsg = <any>errmess;        
+      });
+      
   }
 
   onValueChange(data?: any) {
